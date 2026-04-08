@@ -58,18 +58,18 @@ export function CardDetail({ cardId, onClose, onUpdated }) {
                 className="w-36 rounded-xl shadow-lg flex-shrink-0"
               />
             ) : (
-              <div className="w-36 h-48 bg-gray-800 rounded-xl flex items-center justify-center flex-shrink-0">
-                <span className="text-gray-500 text-sm">No image</span>
+              <div className="w-36 h-48 bg-vault-raised rounded-xl flex items-center justify-center flex-shrink-0">
+                <span className="text-vault-faint text-sm">No image</span>
               </div>
             )}
             <div className="flex-1 space-y-2">
-              <h3 className="text-xl font-bold text-gray-100">{data.card.name}</h3>
-              <p className="text-sm text-gray-400">
+              <h3 className="text-xl font-bold text-vault-cream">{data.card.name}</h3>
+              <p className="text-sm text-vault-muted">
                 {data.card.set_name} · #{data.card.collector_number}
               </p>
               <div className="flex items-center gap-4 mt-3">
                 <div>
-                  <p className="text-xs text-gray-500 uppercase tracking-wide">Owned</p>
+                  <p className="text-xs text-vault-faint uppercase tracking-wide">Owned</p>
                   {editMode ? (
                     <div className="flex items-center gap-2 mt-1">
                       <Input
@@ -88,10 +88,10 @@ export function CardDetail({ cardId, onClose, onUpdated }) {
                     </div>
                   ) : (
                     <div className="flex items-center gap-2">
-                      <p className="text-2xl font-bold text-amber-400">{data.card.quantity_owned}</p>
+                      <p className="text-2xl font-bold text-vault-gold">{data.card.quantity_owned}</p>
                       <button
                         onClick={() => { setEditMode(true); setNewQty(String(data.card.quantity_owned)); }}
-                        className="text-gray-500 hover:text-gray-300 transition-colors"
+                        className="text-vault-faint hover:text-vault-muted transition-colors"
                       >
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
@@ -102,12 +102,12 @@ export function CardDetail({ cardId, onClose, onUpdated }) {
                   )}
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500 uppercase tracking-wide">Assigned</p>
-                  <p className="text-2xl font-bold text-gray-300">{data.quantity_assigned}</p>
+                  <p className="text-xs text-vault-faint uppercase tracking-wide">Assigned</p>
+                  <p className="text-2xl font-bold text-vault-cream">{data.quantity_assigned}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500 uppercase tracking-wide">Free</p>
-                  <p className={`text-2xl font-bold ${data.quantity_free > 0 ? "text-green-400" : "text-red-400"}`}>
+                  <p className="text-xs text-vault-faint uppercase tracking-wide">Free</p>
+                  <p className={`text-2xl font-bold ${data.quantity_free > 0 ? "text-vault-gold" : "text-red-400"}`}>
                     {data.quantity_free}
                   </p>
                 </div>
@@ -116,22 +116,22 @@ export function CardDetail({ cardId, onClose, onUpdated }) {
           </div>
 
           <div>
-            <h4 className="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-3">
+            <h4 className="text-sm font-semibold text-vault-muted uppercase tracking-wide mb-3">
               En {data.decks.length} {data.decks.length === 1 ? "deck" : "decks"}
             </h4>
             {data.decks.length === 0 ? (
-              <p className="text-gray-500 text-sm">This card is not assigned to any deck.</p>
+              <p className="text-vault-faint text-sm">This card is not assigned to any deck.</p>
             ) : (
               <ul className="space-y-2">
                 {data.decks.map((d) => (
                   <li
                     key={d.deck_card_id}
-                    className="flex items-center justify-between bg-gray-800 rounded-lg px-4 py-3 cursor-pointer hover:bg-gray-700 transition-colors"
+                    className="flex items-center justify-between bg-vault-raised rounded-lg px-4 py-3 cursor-pointer hover:bg-vault-card transition-colors"
                     onClick={() => { onClose(); navigate(`/decks/${d.deck_id}`); }}
                   >
                     <div>
-                      <p className="font-medium text-gray-100">{d.deck_name}</p>
-                      <p className="text-xs text-gray-500">
+                      <p className="font-medium text-vault-cream">{d.deck_name}</p>
+                      <p className="text-xs text-vault-faint">
                         {d.is_sideboard ? "Sideboard" : "Main deck"} · {d.format ?? "No format"}
                       </p>
                     </div>

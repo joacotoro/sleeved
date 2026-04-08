@@ -304,6 +304,7 @@ export function DeckDetailPage() {
   const totalMain = main.reduce((s, c) => s + c.quantity, 0);
 
   return (
+    <>
     <div className="max-w-4xl mx-auto space-y-6 animate-fade-up">
       {/* Header */}
       <div className="flex items-start justify-between gap-4">
@@ -361,8 +362,6 @@ export function DeckDetailPage() {
       <AddCardModal open={showAdd} onClose={() => setShowAdd(false)}
         deckId={Number(id)} onAdded={loadDeck} />
 
-      <CardDetail cardId={selectedCardId} onClose={() => setSelectedCardId(null)} onUpdated={loadDeck} />
-
       <Modal open={showEdit} onClose={() => setShowEdit(false)} title="Edit deck">
         <div className="space-y-4">
           <Input label="Name *" value={editName} onChange={(e) => setEditName(e.target.value)} />
@@ -393,5 +392,7 @@ export function DeckDetailPage() {
         </div>
       </Modal>
     </div>
+    <CardDetail cardId={selectedCardId} onClose={() => setSelectedCardId(null)} onUpdated={loadDeck} />
+    </>
   );
 }
