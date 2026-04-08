@@ -28,3 +28,9 @@ npm-debug.log*
 # Editor
 .vscode/
 .idea/
+
+# Claude Code
+.claude/
+
+# Temp files
+temp_screenshots/
