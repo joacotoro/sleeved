@@ -7,6 +7,7 @@ export function CardRow({ card, onClick, selected, onToggle, onUpdated }) {
   const [editingQty, setEditingQty] = useState(false);
   const [qtyValue, setQtyValue] = useState(String(card.quantity_owned));
   const [saving, setSaving] = useState(false);
+  const [mousePos, setMousePos] = useState(null);
 
   const handleQtyClick = (e) => {
     e.stopPropagation();
@@ -41,8 +42,8 @@ export function CardRow({ card, onClick, selected, onToggle, onUpdated }) {
 
   return (
     <tr
-      className={`border-b border-gray-800 transition-colors ${
-        selected ? "bg-amber-500/10" : "hover:bg-gray-800/50"
+      className={`group border-b border-vault-border transition-colors ${
+        selected ? "bg-vault-gold/10" : "hover:bg-vault-raised/50"
       }`}
     >
       <td className="px-4 py-3" onClick={(e) => e.stopPropagation()}>
@@ -50,27 +51,34 @@ export function CardRow({ card, onClick, selected, onToggle, onUpdated }) {
           type="checkbox"
           checked={selected}
           onChange={onToggle}
-          className="w-4 h-4 accent-amber-500 cursor-pointer"
+          className="w-4 h-4 accent-vault-gold cursor-pointer"
         />
       </td>
       <td className="px-4 py-3 cursor-pointer" onClick={onClick}>
-        {card.image_uri_small ? (
-          <img
-            src={card.image_uri_small}
-            alt={card.name}
-            className="w-8 h-11 object-cover rounded shadow"
-          />
-        ) : (
-          <div className="w-8 h-11 bg-gray-700 rounded flex items-center justify-center">
-            <span className="text-gray-500 text-xs">MTG</span>
+        <span
+          onMouseEnter={(e) => setMousePos({ x: e.clientX, y: e.clientY })}
+          onMouseMove={(e) => setMousePos({ x: e.clientX, y: e.clientY })}
+          onMouseLeave={() => setMousePos(null)}
+          className="font-medium text-vault-cream text-sm group-hover:text-vault-gold transition-colors"
+        >
+          {card.name}
+        </span>
+        <p className="text-xs text-vault-faint">{card.set_name ?? card.set_code ?? "—"}</p>
+        {mousePos && card.image_uri_small && (
+          <div
+            className="fixed z-50 pointer-events-none"
+            style={{
+              left: Math.min(mousePos.x + 36, window.innerWidth - 300),
+              top: mousePos.y - 120,
+            }}
+          >
+            <img
+              src={card.image_uri ?? card.image_uri_small}
+              alt={card.name}
+              className="w-64 rounded-lg shadow-2xl border border-vault-border"
+            />
           </div>
         )}
-      </td>
-      <td className="px-4 py-3 cursor-pointer" onClick={onClick}>
-        <p className="font-medium text-gray-100 text-sm">{card.name}</p>
-      </td>
-      <td className="px-4 py-3 text-sm text-gray-400">
-        {card.set_name ?? card.set_code ?? "—"}
       </td>
       <td className="px-4 py-3 text-center" onClick={(e) => e.stopPropagation()}>
         {editingQty ? (
@@ -83,12 +91,12 @@ export function CardRow({ card, onClick, selected, onToggle, onUpdated }) {
               onChange={(e) => setQtyValue(e.target.value)}
               onKeyDown={handleQtyKeyDown}
               onClick={(e) => e.stopPropagation()}
-              className="w-14 bg-gray-700 border border-amber-500 rounded px-1.5 py-0.5 text-center text-sm text-gray-100 focus:outline-none"
+              className="w-14 bg-vault-dark border border-vault-gold rounded px-1.5 py-0.5 text-center text-sm text-vault-cream focus:outline-none"
             />
             <button
               onClick={handleQtySave}
               disabled={saving}
-              className="text-green-400 hover:text-green-300"
+              className="text-vault-gold hover:text-vault-gold-light"
               title="Save"
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -97,7 +105,7 @@ export function CardRow({ card, onClick, selected, onToggle, onUpdated }) {
             </button>
             <button
               onClick={(e) => { e.stopPropagation(); setEditingQty(false); }}
-              className="text-gray-500 hover:text-gray-300"
+              className="text-vault-faint hover:text-vault-muted"
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -107,7 +115,7 @@ export function CardRow({ card, onClick, selected, onToggle, onUpdated }) {
         ) : (
           <button
             onClick={handleQtyClick}
-            className="text-gray-100 font-medium hover:text-amber-400 transition-colors tabular-nums"
+            className="text-vault-cream font-medium hover:text-vault-gold transition-colors tabular-nums"
             title="Click to edit"
           >
             {card.quantity_owned}
@@ -115,10 +123,10 @@ export function CardRow({ card, onClick, selected, onToggle, onUpdated }) {
         )}
       </td>
       <td className="px-4 py-3 text-center">
-        <span className="text-gray-300">{card.quantity_assigned}</span>
+        <span className="text-vault-muted">{card.quantity_assigned}</span>
       </td>
       <td className="px-4 py-3 text-center">
-        <span className={`font-medium ${isFree ? "text-green-400" : "text-red-400"}`}>
+        <span className={`font-medium ${isFree ? "text-vault-gold" : "text-vault-faint"}`}>
           {card.quantity_free}
         </span>
       </td>

@@ -51,8 +51,8 @@ export function DeckListPage() {
     <div className="max-w-5xl mx-auto space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-100">My decks</h1>
-          <p className="text-sm text-gray-400 mt-0.5">{decks.length} decks</p>
+          <h1 className="font-cinzel text-2xl font-semibold text-vault-cream tracking-wide">My decks</h1>
+          <p className="text-sm text-vault-muted mt-0.5">{decks.length} decks</p>
         </div>
         <div className="flex gap-2">
           <Button variant="secondary" onClick={() => setShowImport(true)}>
@@ -73,8 +73,8 @@ export function DeckListPage() {
       {loading ? (
         <LoadingScreen />
       ) : decks.length === 0 ? (
-        <div className="bg-gray-800 border border-gray-700 rounded-xl p-12 text-center space-y-4">
-          <p className="text-gray-400">You don't have any decks yet.</p>
+        <div className="border border-vault-border border-dashed rounded-xl p-12 text-center space-y-4">
+          <p className="text-vault-faint font-cinzel text-sm tracking-wide">You don't have any decks yet.</p>
           <div className="flex justify-center gap-3">
             <Button variant="secondary" onClick={() => setShowImport(true)}>Import deck</Button>
             <Button onClick={() => setShowCreate(true)}>Create deck</Button>

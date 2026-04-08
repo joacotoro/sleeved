@@ -81,8 +81,8 @@ export function CardsPage() {
     <div className="max-w-6xl mx-auto space-y-6">
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <div>
-          <h1 className="text-2xl font-bold text-gray-100">My cards</h1>
-          <p className="text-sm text-gray-400 mt-0.5">{cards.length} cards in the system</p>
+          <h1 className="font-cinzel text-2xl font-semibold text-vault-cream tracking-wide">My cards</h1>
+          <p className="text-sm text-vault-muted mt-0.5">{cards.length} cards in the system</p>
         </div>
         <div className="flex items-center gap-3">
           {selected.size > 0 && (
@@ -95,7 +95,7 @@ export function CardsPage() {
             placeholder="Filter by name..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-amber-500 w-56"
+            className="input-vault rounded-lg px-3 py-2 text-sm w-56"
           />
         </div>
       </div>
@@ -103,49 +103,43 @@ export function CardsPage() {
       {loading ? (
         <LoadingScreen />
       ) : filtered.length === 0 ? (
-        <div className="bg-gray-800 border border-gray-700 rounded-xl p-12 text-center">
-          <p className="text-gray-400">
+        <div className="border border-vault-border border-dashed rounded-xl p-12 text-center">
+          <p className="text-vault-faint font-cinzel text-sm tracking-wide">
             {search ? `No results for "${search}"` : "No cards in the system yet."}
           </p>
           {!search && (
-            <p className="text-gray-500 text-sm mt-2">
+            <p className="text-vault-muted text-sm mt-2">
               Cards appear here when you assign them to a deck.
             </p>
           )}
         </div>
       ) : (
-        <div className="bg-gray-800 border border-gray-700 rounded-xl overflow-hidden">
+        <div className="border border-vault-border rounded-xl overflow-visible">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-gray-700">
+              <tr className="border-b border-vault-border bg-vault-card">
                 <th className="px-4 py-3 w-10">
                   <input
                     type="checkbox"
                     checked={allFilteredSelected}
                     onChange={toggleSelectAll}
-                    className="w-4 h-4 accent-amber-500 cursor-pointer"
+                    className="w-4 h-4 accent-vault-gold cursor-pointer"
                     title={allFilteredSelected ? "Deselect all" : "Select all"}
                   />
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wide w-12">
-                  Img
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wide">
+                <th className="px-4 py-3 text-left text-xs font-cinzel font-medium text-vault-muted uppercase tracking-widest">
                   Name
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wide">
-                  Set
-                </th>
-                <th className="px-4 py-3 text-center text-xs font-medium text-gray-400 uppercase tracking-wide">
+                <th className="px-4 py-3 text-center text-xs font-cinzel font-medium text-vault-muted uppercase tracking-widest">
                   Owned
                 </th>
-                <th className="px-4 py-3 text-center text-xs font-medium text-gray-400 uppercase tracking-wide">
+                <th className="px-4 py-3 text-center text-xs font-cinzel font-medium text-vault-muted uppercase tracking-widest">
                   Assigned
                 </th>
-                <th className="px-4 py-3 text-center text-xs font-medium text-gray-400 uppercase tracking-wide">
+                <th className="px-4 py-3 text-center text-xs font-cinzel font-medium text-vault-muted uppercase tracking-widest">
                   Free
                 </th>
-                <th className="px-4 py-3 text-center text-xs font-medium text-gray-400 uppercase tracking-wide">
+                <th className="px-4 py-3 text-center text-xs font-cinzel font-medium text-vault-muted uppercase tracking-widest">
                   Decks
                 </th>
               </tr>

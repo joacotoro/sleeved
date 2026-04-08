@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { api } from "../api/client.js";
 import { Button } from "../components/ui/Button.jsx";
@@ -111,6 +112,7 @@ function DeckCardRow({ dc, onRemove, onEditQty, onCardClick, onMoved }) {
   const [qty, setQty] = useState(dc.quantity);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
+  const [mousePos, setMousePos] = useState(null);
 
   const handleSave = async () => {
     setSaving(true);
@@ -156,23 +158,34 @@ function DeckCardRow({ dc, onRemove, onEditQty, onCardClick, onMoved }) {
         )}
         {error && <p className="text-xs text-red-400 mt-1">{error}</p>}
       </td>
-      {/* Card name with hover image */}
-      <td className="px-4 py-3 relative">
+      {/* Card name */}
+      <td className="px-4 py-3">
         <button className="text-left" onClick={() => onCardClick(dc.card.id)}>
-          <p className="font-medium text-vault-cream text-sm group-hover:text-vault-gold transition-colors">
+          <span
+            onMouseEnter={(e) => setMousePos({ x: e.clientX, y: e.clientY })}
+            onMouseMove={(e) => setMousePos({ x: e.clientX, y: e.clientY })}
+            onMouseLeave={() => setMousePos(null)}
+            className="font-medium text-vault-cream text-sm group-hover:text-vault-gold transition-colors"
+          >
             {dc.card.name}
-          </p>
+          </span>
           <p className="text-xs text-vault-faint">{dc.card.set_name}</p>
         </button>
-        {/* Hover image — triggered by tr group hover */}
-        {dc.card.image_uri_small && (
-          <div className="absolute left-0 top-1/2 -translate-y-1/2 ml-[-200px] z-50 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+        {mousePos && dc.card.image_uri_small && createPortal(
+          <div
+            className="fixed z-50 pointer-events-none"
+            style={{
+              left: Math.min(mousePos.x + 36, window.innerWidth - 300),
+              top: mousePos.y - 120,
+            }}
+          >
             <img
               src={dc.card.image_uri ?? dc.card.image_uri_small}
               alt={dc.card.name}
-              className="w-44 rounded-lg shadow-2xl border border-vault-border"
+              className="w-64 rounded-lg shadow-2xl border border-vault-border"
             />
-          </div>
+          </div>,
+          document.body
         )}
       </td>
       <td className="px-4 py-3">
