@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import { api } from "../../api/client.js";
 import { useDebounce } from "../../hooks/useDebounce.js";
 import { Spinner } from "../ui/Spinner.jsx";
@@ -8,8 +9,10 @@ export function CardSearch({ onSelect, placeholder = "Search card on Scryfall...
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
+  const [dropdownPos, setDropdownPos] = useState(null);
   const debouncedQuery = useDebounce(query, 300);
   const containerRef = useRef(null);
+  const inputRef = useRef(null);
 
   useEffect(() => {
     if (debouncedQuery.length < 2) {
@@ -23,6 +26,10 @@ export function CardSearch({ onSelect, placeholder = "Search card on Scryfall...
       .then((r) => {
         setResults(r.data ?? []);
         setOpen(true);
+        if (inputRef.current) {
+          const rect = inputRef.current.getBoundingClientRect();
+          setDropdownPos({ top: rect.bottom + 4, left: rect.left, width: rect.width });
+        }
       })
       .catch(() => setResults([]))
       .finally(() => setLoading(false));
@@ -49,6 +56,7 @@ export function CardSearch({ onSelect, placeholder = "Search card on Scryfall...
     <div ref={containerRef} className="relative">
       <div className="relative">
         <input
+          ref={inputRef}
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
@@ -62,8 +70,11 @@ export function CardSearch({ onSelect, placeholder = "Search card on Scryfall...
         )}
       </div>
 
-      {open && results.length > 0 && (
-        <ul className="absolute z-50 w-full mt-1 bg-vault-card border border-vault-border rounded-lg shadow-xl max-h-72 overflow-y-auto">
+      {open && dropdownPos && results.length > 0 && createPortal(
+        <ul
+          className="fixed z-[9999] bg-vault-card border border-vault-border rounded-lg shadow-xl max-h-72 overflow-y-auto"
+          style={{ top: dropdownPos.top, left: dropdownPos.left, width: dropdownPos.width }}
+        >
           {results.map((card) => (
             <li key={`${card.scryfall_id}-${card.set_code}`} className="border-b border-vault-border last:border-0">
               <button
@@ -76,13 +87,18 @@ export function CardSearch({ onSelect, placeholder = "Search card on Scryfall...
               </button>
             </li>
           ))}
-        </ul>
+        </ul>,
+        document.body
       )}
 
-      {open && results.length === 0 && !loading && query.length >= 2 && (
-        <div className="absolute z-50 w-full mt-1 bg-vault-card border border-vault-border rounded-lg px-3 py-2.5 text-sm text-vault-muted">
+      {open && dropdownPos && results.length === 0 && !loading && query.length >= 2 && createPortal(
+        <div
+          className="fixed z-[9999] bg-vault-card border border-vault-border rounded-lg px-3 py-2.5 text-sm text-vault-muted"
+          style={{ top: dropdownPos.top, left: dropdownPos.left, width: dropdownPos.width }}
+        >
           No results for "{query}"
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );
