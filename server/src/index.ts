@@ -53,7 +53,7 @@ app.get("/api/health", (_req, res) => {
 });
 
 // Serve static client files in production
-const clientDist = path.join(process.cwd(), "server/public");
+const clientDist = path.join(__dirname, "../../public");
 console.log(`Serving static files from: ${clientDist}`);
 app.use(express.static(clientDist));
 app.get("*", (_req, res) => {
