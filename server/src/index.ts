@@ -17,7 +17,14 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
 const PORT = process.env.PORT ?? 3000;
 
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+      "img-src": ["'self'", "data:", "https://cards.scryfall.io", "https://svgs.scryfall.io"],
+    },
+  },
+}));
 app.use(cors({
   origin: process.env.FRONTEND_URL ?? "http://localhost:5173",
   credentials: true,
