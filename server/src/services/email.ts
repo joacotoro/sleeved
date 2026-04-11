@@ -17,27 +17,27 @@ function baseTemplate(content: string): string {
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sleeved</title>
 </head>
-<body style="margin:0;padding:0;background:#111827;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
-  <table width="100%" cellpadding="0" cellspacing="0" style="background:#111827;padding:40px 16px;">
+<body style="margin:0;padding:0;background:#0e0a06;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#0e0a06;padding:40px 16px;">
     <tr>
       <td align="center">
         <table width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;">
           <!-- Header -->
           <tr>
             <td style="padding-bottom:32px;text-align:center;">
-              <span style="color:#f59e0b;font-size:22px;font-weight:700;letter-spacing:-0.5px;">Sleeved</span>
+              <span style="color:#c9a84c;font-size:18px;font-weight:700;letter-spacing:0.25em;text-transform:uppercase;">SLEEVED</span>
             </td>
           </tr>
           <!-- Card -->
           <tr>
-            <td style="background:#1f2937;border:1px solid #374151;border-radius:12px;padding:40px 32px;">
+            <td style="background:#1a1208;border:1px solid #3a2e1a;border-radius:12px;padding:40px 32px;">
               ${content}
             </td>
           </tr>
           <!-- Footer -->
           <tr>
             <td style="padding-top:24px;text-align:center;">
-              <p style="margin:0;color:#6b7280;font-size:12px;">
+              <p style="margin:0;color:#6b5c3a;font-size:12px;">
                 If you didn't request this, you can safely ignore this email.
               </p>
             </td>
@@ -51,21 +51,21 @@ function baseTemplate(content: string): string {
 }
 
 function ctaButton(text: string, href: string): string {
-  return `<a href="${href}" style="display:inline-block;background:#f59e0b;color:#111827;font-weight:600;font-size:15px;text-decoration:none;padding:12px 28px;border-radius:8px;margin-top:24px;">${text}</a>`;
+  return `<a href="${href}" style="display:inline-block;background:#c9a84c;color:#0e0a06;font-weight:700;font-size:14px;text-decoration:none;padding:12px 28px;border-radius:8px;margin-top:24px;letter-spacing:0.1em;text-transform:uppercase;">${text}</a>`;
 }
 
 export async function sendVerificationEmail(email: string, token: string): Promise<void> {
   const link = `${FRONTEND_URL}/verify-email?token=${token}`;
   const content = `
-    <h1 style="margin:0 0 8px;color:#f9fafb;font-size:20px;font-weight:700;">Verify your email</h1>
-    <p style="margin:0 0 4px;color:#9ca3af;font-size:15px;">Thanks for signing up for Sleeved.</p>
-    <p style="margin:0;color:#9ca3af;font-size:15px;">Click the button below to verify your account. This link expires in <strong style="color:#d1d5db;">24 hours</strong>.</p>
+    <h1 style="margin:0 0 8px;color:#f0e6cc;font-size:20px;font-weight:700;">Verify your email</h1>
+    <p style="margin:0 0 4px;color:#a08c5a;font-size:15px;">Thanks for signing up for Sleeved.</p>
+    <p style="margin:0;color:#a08c5a;font-size:15px;">Click the button below to verify your account. This link expires in <strong style="color:#c9a84c;">24 hours</strong>.</p>
     <div style="text-align:center;margin-top:8px;">
       ${ctaButton("Verify email", link)}
     </div>
-    <p style="margin:24px 0 0;color:#6b7280;font-size:13px;text-align:center;">
+    <p style="margin:24px 0 0;color:#6b5c3a;font-size:13px;text-align:center;">
       Or copy this link:<br/>
-      <span style="color:#9ca3af;word-break:break-all;">${link}</span>
+      <span style="color:#a08c5a;word-break:break-all;">${link}</span>
     </p>
   `;
   await getResend().emails.send({
@@ -79,14 +79,14 @@ export async function sendVerificationEmail(email: string, token: string): Promi
 export async function sendPasswordResetEmail(email: string, token: string): Promise<void> {
   const link = `${FRONTEND_URL}/reset-password?token=${token}`;
   const content = `
-    <h1 style="margin:0 0 8px;color:#f9fafb;font-size:20px;font-weight:700;">Reset your password</h1>
-    <p style="margin:0;color:#9ca3af;font-size:15px;">We received a request to reset your Sleeved password. Click the button below to choose a new one. This link expires in <strong style="color:#d1d5db;">1 hour</strong>.</p>
+    <h1 style="margin:0 0 8px;color:#f0e6cc;font-size:20px;font-weight:700;">Reset your password</h1>
+    <p style="margin:0;color:#a08c5a;font-size:15px;">We received a request to reset your Sleeved password. Click the button below to choose a new one. This link expires in <strong style="color:#c9a84c;">1 hour</strong>.</p>
     <div style="text-align:center;margin-top:8px;">
       ${ctaButton("Reset password", link)}
     </div>
-    <p style="margin:24px 0 0;color:#6b7280;font-size:13px;text-align:center;">
+    <p style="margin:24px 0 0;color:#6b5c3a;font-size:13px;text-align:center;">
       Or copy this link:<br/>
-      <span style="color:#9ca3af;word-break:break-all;">${link}</span>
+      <span style="color:#a08c5a;word-break:break-all;">${link}</span>
     </p>
   `;
   await getResend().emails.send({

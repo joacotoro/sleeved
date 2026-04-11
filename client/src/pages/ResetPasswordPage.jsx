@@ -31,10 +31,10 @@ export function ResetPasswordPage() {
 
   if (!token) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center px-4">
-        <div className="text-center">
-          <p className="text-red-400 text-sm mb-4">Invalid reset link.</p>
-          <Link to="/forgot-password" className="text-amber-400 hover:text-amber-300 text-sm">
+      <div className="min-h-screen bg-vault-black flex items-center justify-center px-4">
+        <div className="text-center space-y-3">
+          <p className="text-red-400 text-sm">Invalid reset link.</p>
+          <Link to="/forgot-password" className="text-vault-gold hover:text-vault-gold-light text-sm transition-colors">
             Request a new one
           </Link>
         </div>
@@ -43,45 +43,47 @@ export function ResetPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 flex items-center justify-center px-4">
-      <div className="w-full max-w-sm">
-        <div className="text-center mb-8">
-          <h1 className="text-amber-400 font-bold text-2xl tracking-tight">Sleeved</h1>
-          <p className="text-gray-400 text-sm mt-1">Set a new password</p>
+    <div className="min-h-screen bg-vault-black flex items-center justify-center px-4">
+      <div className="w-full max-w-sm animate-fade-up">
+        <div className="text-center mb-10">
+          <h1 className="font-cinzel text-vault-gold text-2xl tracking-[0.25em] font-semibold mb-1">
+            SLEEVED
+          </h1>
+          <div className="w-12 h-px bg-gradient-to-r from-transparent via-vault-gold/50 to-transparent mx-auto" />
+          <p className="text-vault-muted text-xs mt-3 tracking-wider">Set a new password</p>
         </div>
 
-        <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
+        <div className="bg-vault-card border border-vault-border rounded-2xl p-7">
           {done ? (
             <div className="text-center py-2">
-              <div className="text-3xl mb-3">✅</div>
-              <p className="text-gray-300 text-sm">Password updated. Redirecting to sign in...</p>
+              <p className="text-vault-cream text-sm">Password updated. Redirecting to sign in...</p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
               {error && (
-                <div className="bg-red-500/10 border border-red-500/30 text-red-400 text-sm px-3 py-2 rounded-lg">
+                <div className="bg-red-950/40 border border-red-900/50 text-red-400 text-xs px-3 py-2 rounded-lg">
                   {error}
                 </div>
               )}
               <div>
-                <label className="block text-sm text-gray-400 mb-1">New password</label>
+                <label className="block text-xs text-vault-muted font-cinzel tracking-widest uppercase mb-1.5">New password</label>
                 <input
                   type="password"
                   value={form.password}
                   onChange={(e) => setForm((f) => ({ ...f, password: e.target.value }))}
-                  className="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-gray-100 text-sm focus:outline-none focus:border-amber-500"
+                  className="input-vault w-full rounded-lg px-3 py-2.5 text-sm"
                   placeholder="minimum 8 characters"
                   required
                   autoFocus
                 />
               </div>
               <div>
-                <label className="block text-sm text-gray-400 mb-1">Confirm password</label>
+                <label className="block text-xs text-vault-muted font-cinzel tracking-widest uppercase mb-1.5">Confirm password</label>
                 <input
                   type="password"
                   value={form.confirm}
                   onChange={(e) => setForm((f) => ({ ...f, confirm: e.target.value }))}
-                  className="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-gray-100 text-sm focus:outline-none focus:border-amber-500"
+                  className="input-vault w-full rounded-lg px-3 py-2.5 text-sm"
                   placeholder="••••••••"
                   required
                 />
@@ -89,9 +91,9 @@ export function ResetPasswordPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-amber-500 hover:bg-amber-400 disabled:opacity-50 text-gray-900 font-semibold text-sm py-2 rounded-lg transition-colors"
+                className="w-full bg-vault-gold hover:bg-vault-gold-light disabled:opacity-40 text-vault-black font-cinzel font-semibold text-sm py-2.5 rounded-lg transition-colors tracking-widest mt-2"
               >
-                {loading ? "Saving..." : "Set new password"}
+                {loading ? "SAVING..." : "SET NEW PASSWORD"}
               </button>
             </form>
           )}
