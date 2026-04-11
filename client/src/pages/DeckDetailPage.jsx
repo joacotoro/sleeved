@@ -107,6 +107,8 @@ function PhysicalLocation({ dc, onMoved }) {
   );
 }
 
+const supportsHover = window.matchMedia("(hover: hover)").matches;
+
 function DeckCardRow({ dc, deckId, onRemove, onEditQty, onCardClick, onMoved }) {
   const [editMode, setEditMode] = useState(false);
   const [qty, setQty] = useState(dc.quantity);
@@ -162,9 +164,9 @@ function DeckCardRow({ dc, deckId, onRemove, onEditQty, onCardClick, onMoved }) 
       <td className="px-4 py-3">
         <button className="text-left" onClick={() => onCardClick(dc.card.id)}>
           <span
-            onMouseEnter={(e) => setMousePos({ x: e.clientX, y: e.clientY })}
-            onMouseMove={(e) => setMousePos({ x: e.clientX, y: e.clientY })}
-            onMouseLeave={() => setMousePos(null)}
+            onMouseEnter={supportsHover ? (e) => setMousePos({ x: e.clientX, y: e.clientY }) : undefined}
+            onMouseMove={supportsHover ? (e) => setMousePos({ x: e.clientX, y: e.clientY }) : undefined}
+            onMouseLeave={supportsHover ? () => setMousePos(null) : undefined}
             className="font-medium text-vault-cream text-sm group-hover:text-vault-gold transition-colors"
           >
             {dc.card.name}

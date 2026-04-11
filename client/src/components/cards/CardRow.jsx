@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Badge } from "../ui/Badge.jsx";
 import { api } from "../../api/client.js";
 
+const supportsHover = window.matchMedia("(hover: hover)").matches;
+
 export function CardRow({ card, onClick, selected, onToggle, onUpdated }) {
   const isFree = card.quantity_free > 0;
   const [editingQty, setEditingQty] = useState(false);
@@ -56,9 +58,9 @@ export function CardRow({ card, onClick, selected, onToggle, onUpdated }) {
       </td>
       <td className="px-4 py-3 cursor-pointer" onClick={onClick}>
         <span
-          onMouseEnter={(e) => setMousePos({ x: e.clientX, y: e.clientY })}
-          onMouseMove={(e) => setMousePos({ x: e.clientX, y: e.clientY })}
-          onMouseLeave={() => setMousePos(null)}
+          onMouseEnter={supportsHover ? (e) => setMousePos({ x: e.clientX, y: e.clientY }) : undefined}
+          onMouseMove={supportsHover ? (e) => setMousePos({ x: e.clientX, y: e.clientY }) : undefined}
+          onMouseLeave={supportsHover ? () => setMousePos(null) : undefined}
           className="font-medium text-vault-cream text-sm group-hover:text-vault-gold transition-colors"
         >
           {card.name}
