@@ -216,8 +216,8 @@ function CardSection({ title, cards, deckId, onRemove, onEditQty, onCardClick, o
         <Badge variant="default">{total} cards</Badge>
         {conflictCount > 0 && <Badge variant="warning">{conflictCount} in another deck</Badge>}
       </div>
-      <div className="bg-vault-card border border-vault-border rounded-xl">
-        <table className="w-full">
+      <div className="bg-vault-card border border-vault-border rounded-xl overflow-x-auto">
+        <table className="w-full min-w-[400px]">
           <thead>
             <tr className="border-b border-vault-border rounded-t-xl">
               <th className="px-4 py-2 text-center text-xs text-vault-muted font-cinzel tracking-widest uppercase w-20 rounded-tl-xl">Qty</th>
