@@ -79,7 +79,7 @@ export function CardSearch({ onSelect, placeholder = "Search card on Scryfall...
             <li key={`${card.scryfall_id}-${card.set_code}`} className="border-b border-vault-border last:border-0">
               <button
                 type="button"
-                onClick={() => handleSelect(card)}
+                onMouseDown={(e) => { e.preventDefault(); handleSelect(card); }}
                 className="w-full px-3 py-2.5 hover:bg-vault-raised transition-colors text-left"
               >
                 <p className="text-sm font-medium text-vault-cream">{card.name}</p>
