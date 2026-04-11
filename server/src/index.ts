@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
+import path from "path";
+import { fileURLToPath } from "url";
 import { initDB } from "./db/index.js";
 import authRouter, { passport } from "./routes/auth.js";
 import cardsRouter from "./routes/cards.js";
@@ -9,6 +11,8 @@ import decksRouter from "./routes/decks.js";
 import assignmentsRouter from "./routes/assignments.js";
 import scryfallRouter from "./routes/scryfall.js";
 import importRouter from "./routes/import.js";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const app = express();
 const PORT = process.env.PORT ?? 3000;
@@ -46,6 +50,13 @@ app.use("/api/assignments", assignmentsRouter);
 // Health check
 app.get("/api/health", (_req, res) => {
   res.json({ ok: true, ts: new Date().toISOString() });
+});
+
+// Serve static client files in production
+const clientDist = path.resolve(__dirname, "../../client/dist");
+app.use(express.static(clientDist));
+app.get("*", (_req, res) => {
+  res.sendFile(path.join(clientDist, "index.html"));
 });
 
 app.listen(PORT, () => {
