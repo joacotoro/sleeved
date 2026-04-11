@@ -53,7 +53,7 @@ export function CardSearch({ onSelect, placeholder = "Search card on Scryfall...
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder={placeholder}
-          className="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 pr-8 text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-amber-500 text-sm"
+          className="input-vault w-full rounded-lg px-3 py-2.5 pr-8 text-sm"
         />
         {loading && (
           <div className="absolute right-2 top-1/2 -translate-y-1/2">
@@ -63,31 +63,16 @@ export function CardSearch({ onSelect, placeholder = "Search card on Scryfall...
       </div>
 
       {open && results.length > 0 && (
-        <ul className="absolute z-50 w-full mt-1 bg-gray-800 border border-gray-700 rounded-lg shadow-xl max-h-72 overflow-y-auto">
+        <ul className="absolute z-50 w-full mt-1 bg-vault-card border border-vault-border rounded-lg shadow-xl max-h-72 overflow-y-auto">
           {results.map((card) => (
-            <li key={`${card.scryfall_id}-${card.set_code}`}>
+            <li key={`${card.scryfall_id}-${card.set_code}`} className="border-b border-vault-border last:border-0">
               <button
                 type="button"
                 onClick={() => handleSelect(card)}
-                className="w-full flex items-center gap-3 px-3 py-2 hover:bg-gray-700 transition-colors text-left"
+                className="w-full px-3 py-2.5 hover:bg-vault-raised transition-colors text-left"
               >
-                {card.image_uri_small ? (
-                  <img
-                    src={card.image_uri_small}
-                    alt={card.name}
-                    className="w-8 h-11 object-cover rounded"
-                  />
-                ) : (
-                  <div className="w-8 h-11 bg-gray-700 rounded flex items-center justify-center">
-                    <span className="text-gray-500 text-xs">?</span>
-                  </div>
-                )}
-                <div>
-                  <p className="text-sm font-medium text-gray-100">{card.name}</p>
-                  <p className="text-xs text-gray-400">
-                    {card.set_name} · #{card.collector_number}
-                  </p>
-                </div>
+                <p className="text-sm font-medium text-vault-cream">{card.name}</p>
+                <p className="text-xs text-vault-faint">{card.set_name} · #{card.collector_number}</p>
               </button>
             </li>
           ))}
@@ -95,7 +80,7 @@ export function CardSearch({ onSelect, placeholder = "Search card on Scryfall...
       )}
 
       {open && results.length === 0 && !loading && query.length >= 2 && (
-        <div className="absolute z-50 w-full mt-1 bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-400">
+        <div className="absolute z-50 w-full mt-1 bg-vault-card border border-vault-border rounded-lg px-3 py-2.5 text-sm text-vault-muted">
           No results for "{query}"
         </div>
       )}

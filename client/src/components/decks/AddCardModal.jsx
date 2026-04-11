@@ -92,25 +92,20 @@ export function AddCardModal({ open, onClose, deckId, onAdded }) {
     <Modal open={open} onClose={handleClose} title="Add card to deck" size="md">
       <div className="space-y-4">
         <div>
-          <label className="text-sm font-medium text-gray-300 block mb-1">Search card</label>
+          <label className="text-xs font-cinzel tracking-widest uppercase text-vault-muted block mb-1.5">Search card</label>
           <CardSearch onSelect={handleSelectCard} />
         </div>
 
         {selectedCard && (
           <>
-            <div className="flex items-center gap-3 bg-gray-800 rounded-lg p-3">
-              {selectedCard.image_uri_small && (
-                <img src={selectedCard.image_uri_small} alt={selectedCard.name} className="w-10 h-14 object-cover rounded" />
+            <div className="bg-vault-raised border border-vault-border rounded-lg p-3">
+              <p className="font-medium text-vault-cream text-sm">{selectedCard.name}</p>
+              <p className="text-xs text-vault-faint mt-0.5">{selectedCard.set_name}</p>
+              {!isNewCard && (
+                <p className="text-xs text-green-400 mt-1">
+                  Already in your collection · {selectedCard.quantity_owned} owned
+                </p>
               )}
-              <div>
-                <p className="font-medium text-gray-100">{selectedCard.name}</p>
-                <p className="text-xs text-gray-400">{selectedCard.set_name}</p>
-                {!isNewCard && (
-                  <p className="text-xs text-green-400 mt-0.5">
-                    Already in your collection · {selectedCard.quantity_owned} owned
-                  </p>
-                )}
-              </div>
             </div>
 
             {isNewCard && (
@@ -137,9 +132,9 @@ export function AddCardModal({ open, onClose, deckId, onAdded }) {
                 type="checkbox"
                 checked={isSideboard}
                 onChange={(e) => setIsSideboard(e.target.checked)}
-                className="w-4 h-4 accent-amber-500"
+                className="w-4 h-4 accent-vault-gold"
               />
-              <span className="text-sm text-gray-300">Sideboard</span>
+              <span className="text-sm text-vault-muted">Sideboard</span>
             </label>
 
             {error && <p className="text-red-400 text-sm">{error}</p>}
