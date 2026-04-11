@@ -41,7 +41,7 @@ export function VerifyEmailPage() {
 
   if (status === "loading") {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+      <div className="min-h-dvh bg-gray-900 flex items-center justify-center">
         <div className="text-center">
           <div className="w-8 h-8 border-2 border-amber-400 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
           <p className="text-gray-400 text-sm">Verifying your email...</p>
@@ -52,7 +52,7 @@ export function VerifyEmailPage() {
 
   if (status === "success") {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center px-4">
+      <div className="min-h-dvh bg-gray-900 flex items-center justify-center px-4">
         <div className="text-center max-w-sm">
           <div className="text-4xl mb-4">✅</div>
           <h2 className="text-gray-100 text-xl font-semibold mb-2">Email verified!</h2>
@@ -63,7 +63,7 @@ export function VerifyEmailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 flex items-center justify-center px-4">
+    <div className="min-h-dvh bg-gray-900 flex items-center justify-center px-4">
       <div className="text-center max-w-sm w-full">
         <div className="text-4xl mb-4">❌</div>
         <h2 className="text-gray-100 text-xl font-semibold mb-2">Verification failed</h2>

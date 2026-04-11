@@ -39,7 +39,7 @@ export function RegisterPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-vault-black flex items-center justify-center px-4">
+      <div className="min-h-dvh bg-vault-black flex items-center justify-center px-4">
         <div className="text-center animate-fade-up max-w-sm">
           <div className="w-14 h-14 rounded-full bg-vault-card border border-vault-border flex items-center justify-center mx-auto mb-5">
             <span className="text-2xl">📬</span>
@@ -57,7 +57,7 @@ export function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen bg-vault-black flex items-center justify-center px-4">
+    <div className="min-h-dvh bg-vault-black flex items-center justify-center px-4">
       <div className="w-full max-w-sm animate-fade-up">
         <div className="text-center mb-10">
           <h1 className="font-cinzel text-vault-gold text-2xl tracking-[0.25em] font-semibold mb-1">SLEEVED</h1>

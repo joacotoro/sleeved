@@ -39,7 +39,7 @@ export function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-vault-black flex items-center justify-center px-4">
+    <div className="min-h-dvh bg-vault-black flex items-center justify-center px-4">
       <div className="w-full max-w-sm animate-fade-up">
         {/* Wordmark */}
         <div className="text-center mb-10">

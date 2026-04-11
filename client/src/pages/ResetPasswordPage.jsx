@@ -31,7 +31,7 @@ export function ResetPasswordPage() {
 
   if (!token) {
     return (
-      <div className="min-h-screen bg-vault-black flex items-center justify-center px-4">
+      <div className="min-h-dvh bg-vault-black flex items-center justify-center px-4">
         <div className="text-center space-y-3">
           <p className="text-red-400 text-sm">Invalid reset link.</p>
           <Link to="/forgot-password" className="text-vault-gold hover:text-vault-gold-light text-sm transition-colors">
@@ -43,7 +43,7 @@ export function ResetPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen bg-vault-black flex items-center justify-center px-4">
+    <div className="min-h-dvh bg-vault-black flex items-center justify-center px-4">
       <div className="w-full max-w-sm animate-fade-up">
         <div className="text-center mb-10">
           <h1 className="font-cinzel text-vault-gold text-2xl tracking-[0.25em] font-semibold mb-1">

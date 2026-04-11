@@ -35,7 +35,7 @@ export function Layout({ children }) {
   }
 
   return (
-    <div className="min-h-screen bg-vault-black flex flex-col">
+    <div className="min-h-dvh bg-vault-black flex flex-col">
       <header className="border-b border-vault-border bg-vault-darker/95 backdrop-blur sticky top-0 z-40">
         <div className="max-w-6xl mx-auto px-5 h-14 flex items-center gap-8">
           {/* Logo */}

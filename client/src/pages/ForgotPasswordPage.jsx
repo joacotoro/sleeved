@@ -18,7 +18,7 @@ export function ForgotPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen bg-vault-black flex items-center justify-center px-4">
+    <div className="min-h-dvh bg-vault-black flex items-center justify-center px-4">
       <div className="w-full max-w-sm animate-fade-up">
         <div className="text-center mb-10">
           <h1 className="font-cinzel text-vault-gold text-2xl tracking-[0.25em] font-semibold mb-1">
