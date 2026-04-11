@@ -43,7 +43,7 @@ export function LoginPage() {
       <div className="w-full max-w-sm animate-fade-up">
         {/* Wordmark */}
         <div className="text-center mb-10">
-          <img src="/favicon.svg" alt="Sleeved logo" className="w-16 h-16 mx-auto mb-3" />
+          <img src="/favicon.svg" alt="Sleeved logo" className="w-24 h-24 mx-auto mb-3" />
           <h1 className="font-cinzel text-vault-gold text-2xl tracking-[0.25em] font-semibold mb-1">
             SLEEVED
           </h1>
