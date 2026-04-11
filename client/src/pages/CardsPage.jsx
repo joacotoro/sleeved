@@ -13,15 +13,15 @@ export function CardsPage() {
   const [selected, setSelected] = useState(new Set());
   const [deleting, setDeleting] = useState(false);
 
-  const loadCards = () => {
-    setLoading(true);
+  const loadCards = (silent = false) => {
+    if (!silent) setLoading(true);
     api
       .getCards()
-      .then((data) => { setCards(data); setSelected(new Set()); })
-      .finally(() => setLoading(false));
+      .then((data) => { setCards(data); if (!silent) setSelected(new Set()); })
+      .finally(() => { if (!silent) setLoading(false); });
   };
 
-  useEffect(loadCards, []);
+  useEffect(() => loadCards(), []);
 
   const filtered = cards.filter((c) =>
     c.name.toLowerCase().includes(search.toLowerCase())
@@ -152,7 +152,7 @@ export function CardsPage() {
                   selected={selected.has(card.id)}
                   onToggle={() => toggleOne(card.id)}
                   onClick={() => setSelectedCardId(card.id)}
-                  onUpdated={loadCards}
+                  onUpdated={() => loadCards(true)}
                 />
               ))}
             </tbody>
@@ -163,7 +163,7 @@ export function CardsPage() {
       <CardDetail
         cardId={selectedCardId}
         onClose={() => setSelectedCardId(null)}
-        onUpdated={loadCards}
+        onUpdated={() => loadCards(true)}
       />
     </div>
   );

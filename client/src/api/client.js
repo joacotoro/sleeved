@@ -58,6 +58,7 @@ export const api = {
   createAssignment: (body) => request("POST", "/assignments", body),
   updateAssignment: (id, body) => request("PUT", `/assignments/${id}`, body),
   deleteAssignment: (id) => request("DELETE", `/assignments/${id}`),
+  yieldAssignment: (id) => request("POST", `/assignments/${id}/yield`),
   moveAssignment: (body) => request("POST", "/assignments/move", body),
   moveAssignmentTo: (body) => request("POST", "/assignments/move", body),
 

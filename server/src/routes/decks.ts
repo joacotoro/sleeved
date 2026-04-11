@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { db } from "../db/index.js";
 import { cards, deck_cards, decks } from "../db/schema.js";
-import { eq, sql, inArray, and } from "drizzle-orm";
+import { eq, sql, inArray, and, asc } from "drizzle-orm";
 import { requireAuth, AuthRequest } from "../middleware/auth.js";
 
 const router = Router();
@@ -118,6 +118,7 @@ router.get("/:id/cards", async (req, res) => {
       .from(deck_cards)
       .innerJoin(cards, eq(cards.id, deck_cards.card_id))
       .where(eq(deck_cards.deck_id, id))
+      .orderBy(asc(cards.name))
       .all();
 
     // Get ALL assignments for these cards across ALL decks (for physical location priority)

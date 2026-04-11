@@ -51,7 +51,7 @@ export function ImportDeckModal({ open, onClose }) {
       } else {
         // Done
         onClose();
-        navigate(`/decks/${result.deck.id}`, { state: { blocked: result.blocked ?? [] } });
+        navigate(`/decks/${result.deck.id}`, { state: { blocked: result.blocked ?? [], importErrors: result.errors ?? [] } });
       }
     } catch (e) {
       setError(e.message);
@@ -66,7 +66,7 @@ export function ImportDeckModal({ open, onClose }) {
     try {
       const result = await api.importDeck({ ...pendingPayload, quantities, resolved_cards: resolvedCards });
       onClose();
-      navigate(`/decks/${result.deck.id}`, { state: { blocked: result.blocked ?? [] } });
+      navigate(`/decks/${result.deck.id}`, { state: { blocked: result.blocked ?? [], importErrors: result.errors ?? [] } });
     } catch (e) {
       setError(e.message);
     } finally {
@@ -114,10 +114,10 @@ export function ImportDeckModal({ open, onClose }) {
           />
 
           <div>
-            <label className="text-sm font-medium text-gray-300 block mb-1">
+            <label className="text-sm font-medium text-vault-cream block mb-1">
               Card list *
             </label>
-            <p className="text-xs text-gray-500 mb-2">
+            <p className="text-xs text-vault-faint mb-2">
               Format: "4 Lightning Bolt" per line. For sideboard, add "// Sideboard" before it.
             </p>
             <Textarea
@@ -146,29 +146,30 @@ export function ImportDeckModal({ open, onClose }) {
 
       {step === 2 && (
         <div className="space-y-4">
-          <p className="text-sm text-gray-300">
+          <p className="text-sm text-vault-muted">
             The following cards are new to your collection. Enter how many physical copies you own of each.
           </p>
 
           <div className="space-y-3 max-h-96 overflow-y-auto pr-1">
             {newCards.map((card) => (
-              <div key={card.scryfall_id} className="flex items-center gap-3 bg-gray-800 rounded-lg p-3">
+              <div key={card.scryfall_id} className="flex items-center gap-3 bg-vault-raised rounded-lg p-3">
                 {card.image_uri_small && (
                   <img src={card.image_uri_small} alt={card.name} className="w-10 h-14 object-cover rounded flex-shrink-0" />
                 )}
                 <div className="flex-1 min-w-0">
-                  <p className="font-medium text-gray-100 text-sm truncate">{card.name}</p>
-                  <p className="text-xs text-gray-400">{card.quantity_in_deck} in deck</p>
+                  <p className="font-medium text-vault-cream text-sm truncate">{card.name}</p>
+                  <p className="text-xs text-vault-muted">{card.quantity_in_deck} in deck</p>
                 </div>
-                <Input
+                <input
                   type="number"
                   min={card.quantity_in_deck}
                   value={quantities[card.scryfall_id] ?? ""}
-                  onChange={(e) =>
-                    setQuantities((prev) => ({ ...prev, [card.scryfall_id]: parseInt(e.target.value, 10) || 0 }))
-                  }
-                  className="w-20 flex-shrink-0"
-                  placeholder="Total"
+                  onChange={(e) => {
+                    const raw = e.target.value;
+                    setQuantities((prev) => ({ ...prev, [card.scryfall_id]: raw === "" ? "" : parseInt(raw, 10) || 0 }));
+                  }}
+                  onFocus={(e) => e.target.select()}
+                  className="w-16 flex-shrink-0 bg-vault-dark border border-vault-border rounded px-2 py-1 text-center text-sm text-vault-cream focus:outline-none focus:border-vault-gold"
                 />
               </div>
             ))}

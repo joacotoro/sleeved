@@ -103,6 +103,32 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
+// POST /api/assignments/:id/yield
+// Re-inserts the assignment with a new (higher) id, giving priority to lower-id assignments
+router.post("/:id/yield", async (req, res) => {
+  const userId = (req as AuthRequest).user.userId;
+  const id = Number(req.params.id);
+  try {
+    const existing = db.select().from(deck_cards).where(eq(deck_cards.id, id)).get();
+    if (!existing) return res.status(404).json({ error: "Asignación no encontrada" });
+
+    if (!deckBelongsToUser(existing.deck_id, userId)) {
+      return res.status(403).json({ error: "No autorizado" });
+    }
+
+    db.delete(deck_cards).where(eq(deck_cards.id, id)).run();
+    const [reinserted] = db
+      .insert(deck_cards)
+      .values({ deck_id: existing.deck_id, card_id: existing.card_id, quantity: existing.quantity, is_sideboard: existing.is_sideboard })
+      .returning()
+      .all();
+
+    res.json({ ok: true, assignment: reinserted });
+  } catch (err: unknown) {
+    res.status(500).json({ error: String(err) });
+  }
+});
+
 // POST /api/assignments/move
 router.post("/move", async (req, res) => {
   const userId = (req as AuthRequest).user.userId;

@@ -84,7 +84,7 @@ function PhysicalLocation({ dc, onMoved }) {
   const handleMove = async () => {
     setMoving(true);
     try {
-      await api.deleteAssignment(conflict.id);
+      await api.yieldAssignment(conflict.id);
       onMoved();
     } catch (e) {
       alert(e.message);
@@ -107,7 +107,7 @@ function PhysicalLocation({ dc, onMoved }) {
   );
 }
 
-function DeckCardRow({ dc, onRemove, onEditQty, onCardClick, onMoved }) {
+function DeckCardRow({ dc, deckId, onRemove, onEditQty, onCardClick, onMoved }) {
   const [editMode, setEditMode] = useState(false);
   const [qty, setQty] = useState(dc.quantity);
   const [saving, setSaving] = useState(false);
@@ -204,7 +204,7 @@ function DeckCardRow({ dc, onRemove, onEditQty, onCardClick, onMoved }) {
   );
 }
 
-function CardSection({ title, cards, onRemove, onEditQty, onCardClick, onMoved }) {
+function CardSection({ title, cards, deckId, onRemove, onEditQty, onCardClick, onMoved }) {
   if (cards.length === 0) return null;
   const total = cards.reduce((s, c) => s + c.quantity, 0);
   const conflictCount = cards.filter((c) => !c.has_physical).length;
@@ -228,7 +228,7 @@ function CardSection({ title, cards, onRemove, onEditQty, onCardClick, onMoved }
           </thead>
           <tbody>
             {cards.map((dc) => (
-              <DeckCardRow key={dc.id} dc={dc} onRemove={onRemove}
+              <DeckCardRow key={dc.id} dc={dc} deckId={deckId} onRemove={onRemove}
                 onEditQty={onEditQty} onCardClick={onCardClick} onMoved={onMoved} />
             ))}
           </tbody>
@@ -243,6 +243,7 @@ export function DeckDetailPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const [blocked, setBlocked] = useState(location.state?.blocked ?? []);
+  const [importErrors, setImportErrors] = useState(location.state?.importErrors ?? []);
   const [deck, setDeck] = useState(null);
   const [deckCards, setDeckCards] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -345,6 +346,21 @@ export function DeckDetailPage() {
         </div>
       ) : (
         <div className="space-y-6">
+          {importErrors.length > 0 && (
+            <div className="bg-red-900/10 border border-red-800/40 rounded-xl p-5 space-y-2">
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-cinzel text-red-400 tracking-wide">
+                  {importErrors.length} card{importErrors.length > 1 ? "s" : ""} could not be imported
+                </h3>
+                <button onClick={() => setImportErrors([])} className="text-vault-faint hover:text-vault-muted text-xs">Dismiss</button>
+              </div>
+              <ul className="space-y-1">
+                {importErrors.map((e, i) => (
+                  <li key={i} className="text-xs text-red-300">{e}</li>
+                ))}
+              </ul>
+            </div>
+          )}
           {blocked.length > 0 && (
             <BlockedCards blocked={blocked} deckId={Number(id)}
               onMoved={(movedScryfall) => {
@@ -352,46 +368,48 @@ export function DeckDetailPage() {
                 loadDeck();
               }} />
           )}
-          <CardSection title="Main Deck" cards={main} onRemove={handleRemove}
+          <CardSection title="Main Deck" cards={main} deckId={Number(id)} onRemove={handleRemove}
             onEditQty={handleEditQty} onCardClick={setSelectedCardId} onMoved={loadDeck} />
-          <CardSection title="Sideboard" cards={sideboard} onRemove={handleRemove}
+          <CardSection title="Sideboard" cards={sideboard} deckId={Number(id)} onRemove={handleRemove}
             onEditQty={handleEditQty} onCardClick={setSelectedCardId} onMoved={loadDeck} />
         </div>
       )}
 
-      <AddCardModal open={showAdd} onClose={() => setShowAdd(false)}
-        deckId={Number(id)} onAdded={loadDeck} />
-
-      <Modal open={showEdit} onClose={() => setShowEdit(false)} title="Edit deck">
-        <div className="space-y-4">
-          <Input label="Name *" value={editName} onChange={(e) => setEditName(e.target.value)} />
-          <Select label="Format" value={editFormat} onChange={(e) => setEditFormat(e.target.value)}>
-            <option value="">No format</option>
-            {FORMATS.map((f) => <option key={f} value={f}>{f}</option>)}
-          </Select>
-          <Input label="Description" value={editDesc} onChange={(e) => setEditDesc(e.target.value)} />
-          {editError && <p className="text-red-400 text-sm">{editError}</p>}
-          <div className="flex justify-end gap-2 pt-2">
-            <Button variant="ghost" onClick={() => setShowEdit(false)}>Cancel</Button>
-            <Button onClick={handleSaveEdit} disabled={saving}>{saving ? "Saving..." : "Save"}</Button>
-          </div>
-        </div>
-      </Modal>
-
-      <Modal open={showDelete} onClose={() => setShowDelete(false)} title="Delete deck" size="sm">
-        <div className="space-y-4">
-          <p className="text-vault-muted text-sm">
-            Are you sure you want to delete{" "}
-            <strong className="text-vault-cream">"{deck.name}"</strong>?{" "}
-            All card assignments will be released.
-          </p>
-          <div className="flex justify-end gap-2">
-            <Button variant="ghost" onClick={() => setShowDelete(false)}>Cancel</Button>
-            <Button variant="danger" onClick={handleDelete}>Delete deck</Button>
-          </div>
-        </div>
-      </Modal>
     </div>
+
+    <AddCardModal open={showAdd} onClose={() => setShowAdd(false)}
+      deckId={Number(id)} onAdded={loadDeck} />
+
+    <Modal open={showEdit} onClose={() => setShowEdit(false)} title="Edit deck">
+      <div className="space-y-4">
+        <Input label="Name *" value={editName} onChange={(e) => setEditName(e.target.value)} />
+        <Select label="Format" value={editFormat} onChange={(e) => setEditFormat(e.target.value)}>
+          <option value="">No format</option>
+          {FORMATS.map((f) => <option key={f} value={f}>{f}</option>)}
+        </Select>
+        <Input label="Description" value={editDesc} onChange={(e) => setEditDesc(e.target.value)} />
+        {editError && <p className="text-red-400 text-sm">{editError}</p>}
+        <div className="flex justify-end gap-2 pt-2">
+          <Button variant="ghost" onClick={() => setShowEdit(false)}>Cancel</Button>
+          <Button onClick={handleSaveEdit} disabled={saving}>{saving ? "Saving..." : "Save"}</Button>
+        </div>
+      </div>
+    </Modal>
+
+    <Modal open={showDelete} onClose={() => setShowDelete(false)} title="Delete deck" size="sm">
+      <div className="space-y-4">
+        <p className="text-vault-muted text-sm">
+          Are you sure you want to delete{" "}
+          <strong className="text-vault-cream">"{deck.name}"</strong>?{" "}
+          All card assignments will be released.
+        </p>
+        <div className="flex justify-end gap-2">
+          <Button variant="ghost" onClick={() => setShowDelete(false)}>Cancel</Button>
+          <Button variant="danger" onClick={handleDelete}>Delete deck</Button>
+        </div>
+      </div>
+    </Modal>
+
     <CardDetail cardId={selectedCardId} onClose={() => setSelectedCardId(null)} onUpdated={loadDeck} />
     </>
   );

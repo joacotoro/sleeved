@@ -145,9 +145,13 @@ function createDeckAndAssignments(
   }
 
   for (const entry of aggregated.values()) {
-    const card = db.select().from(cards)
-      .where(and(eq(cards.scryfall_id, entry.scryfall_id), eq(cards.user_id, userId)))
-      .get();
+    const card =
+      db.select().from(cards)
+        .where(and(eq(cards.scryfall_id, entry.scryfall_id), eq(cards.user_id, userId)))
+        .get() ??
+      db.select().from(cards)
+        .where(and(eq(cards.name, entry.scryfall_data.name), eq(cards.user_id, userId)))
+        .get();
     if (!card) { errors.push(`No se pudo encontrar en DB: ${entry.scryfall_id}`); continue; }
 
     db.insert(deck_cards).values({
@@ -181,7 +185,9 @@ router.post("/", async (req, res) => {
       if (sd) resolved.push({ ...line, scryfall_data: sd });
     }
     const newCardsNeeded = (resolved_cards as ScryfallData[]).filter(
-      (c) => !db.select().from(cards).where(and(eq(cards.scryfall_id, c.scryfall_id), eq(cards.user_id, userId))).get()
+      (c) =>
+        !db.select().from(cards).where(and(eq(cards.scryfall_id, c.scryfall_id), eq(cards.user_id, userId))).get() &&
+        !db.select().from(cards).where(and(eq(cards.name, c.name), eq(cards.user_id, userId))).get()
     );
     const { deck, errors, blocked } = createDeckAndAssignments(
       userId, name, format ?? null, description ?? null, resolved, quantities, newCardsNeeded
@@ -205,10 +211,15 @@ router.post("/", async (req, res) => {
   // Find new cards (not yet in this user's collection)
   const newCardsNeeded: Array<ScryfallData & { quantity_in_deck: number }> = [];
   for (const r of resolved) {
-    const existing = db.select().from(cards)
+    const existingByScryfall = db.select().from(cards)
       .where(and(eq(cards.scryfall_id, r.scryfall_data.scryfall_id), eq(cards.user_id, userId)))
       .get();
-    if (!existing) {
+    const existingByName = !existingByScryfall
+      ? db.select().from(cards)
+          .where(and(eq(cards.name, r.scryfall_data.name), eq(cards.user_id, userId)))
+          .get()
+      : null;
+    if (!existingByScryfall && !existingByName) {
       const already = newCardsNeeded.find((c) => c.scryfall_id === r.scryfall_data.scryfall_id);
       if (already) already.quantity_in_deck += r.quantity;
       else newCardsNeeded.push({ ...r.scryfall_data, quantity_in_deck: r.quantity });
