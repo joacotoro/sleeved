@@ -72,37 +72,40 @@ function BlockedCards({ blocked, deckId, onMoved }) {
 }
 
 function PhysicalLocation({ dc, onMoved }) {
-  const [moving, setMoving] = useState(false);
+  const [moving, setMoving] = useState(null);
 
   if (dc.has_physical) {
     return <span className="text-xs text-green-400 font-medium">Here</span>;
   }
 
-  const conflict = dc.conflicts[0];
-  if (!conflict) return null;
+  if (!dc.conflicts.length) return null;
 
-  const handleMove = async () => {
-    setMoving(true);
+  const handleMove = async (conflict) => {
+    setMoving(conflict.id);
     try {
       await api.yieldAssignment(conflict.id);
       onMoved();
     } catch (e) {
       alert(e.message);
     } finally {
-      setMoving(false);
+      setMoving(null);
     }
   };
 
   return (
-    <div className="flex items-center gap-2">
-      <span className="text-xs text-vault-gold whitespace-nowrap">In: {conflict.deck_name}</span>
-      <button
-        onClick={handleMove}
-        disabled={moving}
-        className="text-xs bg-vault-gold/10 hover:bg-vault-gold/20 text-vault-gold px-2 py-0.5 rounded transition-colors whitespace-nowrap disabled:opacity-50 border border-vault-gold/20"
-      >
-        {moving ? "..." : "Move here"}
-      </button>
+    <div className="flex flex-col gap-1">
+      {dc.conflicts.map((conflict) => (
+        <div key={conflict.id} className="flex items-center gap-2">
+          <span className="text-xs text-vault-gold whitespace-nowrap">In: {conflict.deck_name}</span>
+          <button
+            onClick={() => handleMove(conflict)}
+            disabled={moving !== null}
+            className="text-xs bg-vault-gold/10 hover:bg-vault-gold/20 text-vault-gold px-2 py-0.5 rounded transition-colors whitespace-nowrap disabled:opacity-50 border border-vault-gold/20"
+          >
+            {moving === conflict.id ? "..." : "Move here"}
+          </button>
+        </div>
+      ))}
     </div>
   );
 }
