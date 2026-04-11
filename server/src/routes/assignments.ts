@@ -106,7 +106,7 @@ router.delete("/:id", async (req, res) => {
 // POST /api/assignments/:id/yield
 // Re-inserts the assignment with a new (higher) id, giving priority to lower-id assignments
 router.post("/:id/yield", async (req, res) => {
-  const userId = (req as AuthRequest).user.userId;
+  const userId = (req as unknown as AuthRequest).user.userId;
   const id = Number(req.params.id);
   try {
     const existing = db.select().from(deck_cards).where(eq(deck_cards.id, id)).get();
