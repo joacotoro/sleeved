@@ -2,7 +2,7 @@ import { Router } from "express";
 import { db } from "../db/index.js";
 import { cards, deck_cards, decks } from "../db/schema.js";
 import { eq, and } from "drizzle-orm";
-import type { ImportLine } from "../../../shared/types.js";
+import type { ImportLine } from "../types.js";
 import { requireAuth, AuthRequest } from "../middleware/auth.js";
 
 const router = Router();

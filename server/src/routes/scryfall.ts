@@ -1,5 +1,5 @@
 import { Router } from "express";
-import type { ScryfallCard } from "../../../shared/types.js";
+import type { ScryfallCard } from "../types.js";
 
 const router = Router();
 
