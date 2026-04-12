@@ -2,8 +2,6 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { api } from "../api/client.js";
 
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL ?? "http://localhost:3000";
-
 function GoogleIcon() {
   return (
     <svg width="16" height="16" viewBox="0 0 48 48">
@@ -67,7 +65,7 @@ export function RegisterPage() {
 
         <div className="bg-vault-card border border-vault-border rounded-2xl p-7 space-y-5">
           <a
-            href={`${BACKEND_URL}/api/auth/google`}
+            href="/api/auth/google"
             className="flex items-center justify-center gap-2.5 w-full bg-vault-raised hover:bg-vault-raised/80 border border-vault-border-light text-vault-cream text-sm py-2.5 rounded-lg transition-colors"
           >
             <GoogleIcon />

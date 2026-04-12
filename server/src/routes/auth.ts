@@ -12,7 +12,7 @@ import { sendVerificationEmail, sendPasswordResetEmail } from "../services/email
 const router = Router();
 
 const FRONTEND_URL = process.env.FRONTEND_URL ?? "http://localhost:5173";
-const BACKEND_URL = process.env.BACKEND_URL ?? "http://localhost:3000";
+const BACKEND_URL = process.env.FRONTEND_URL ?? "http://localhost:3000";
 
 // ─── Google OAuth setup ────────────────────────────────────────────────────────
 
