@@ -21,7 +21,7 @@ app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       ...helmet.contentSecurityPolicy.getDefaultDirectives(),
-      "img-src": ["'self'", "data:", "https://cards.scryfall.io", "https://svgs.scryfall.io"],
+      "img-src": ["'self'", "data:", "https://cards.scryfall.io", "https://svgs.scryfall.io", "https://lh3.googleusercontent.com"],
     },
   },
 }));
